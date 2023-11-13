@@ -1,5 +1,5 @@
 // 查询列表页接口
-const getOrderDetailPage = (params) => {
+let getOrderDetailPage = (params) => {
   return $axios({
     url: '/order/page',
     method: 'get',

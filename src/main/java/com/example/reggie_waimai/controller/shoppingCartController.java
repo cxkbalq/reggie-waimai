@@ -34,20 +34,22 @@ public class shoppingCartController {
 
 
     @GetMapping("/list")
-    public R<List<ShoppingCart>> listR(){
-        Long currentId = BaseContext.getCurrentId();
+    public R<List<ShoppingCart>> listR(HttpServletRequest request){
+        Long userid=(Long)request.getSession().getAttribute("user");
+      //  Long userid=BaseContext.getCurrentId();
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(ShoppingCart::getUserId,currentId);
+        lambdaQueryWrapper.eq(ShoppingCart::getUserId,userid);
         List<ShoppingCart> list = shoppingCartService.list(lambdaQueryWrapper);
         return R.success(list);
 
     }
 
     @DeleteMapping("/clean")
-    public R<String> clean(){
+    public R<String> clean(HttpServletRequest request){
+        Long userid=(Long)request.getSession().getAttribute("user");
         Long currentId = BaseContext.getCurrentId();
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(ShoppingCart::getUserId,currentId);
+        lambdaQueryWrapper.eq(ShoppingCart::getUserId,userid);
         shoppingCartService.remove(lambdaQueryWrapper);
         return R.success("购物车清除成功");
     }

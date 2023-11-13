@@ -18,7 +18,6 @@ public class DishFlavor implements Serializable {
 
     private Long id;
 
-
     //菜品id
     private Long dishId;
 

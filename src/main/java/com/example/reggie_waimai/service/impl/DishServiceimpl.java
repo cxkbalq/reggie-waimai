@@ -28,7 +28,7 @@ public class DishServiceimpl extends ServiceImpl<DishMapper, Dish> implements Di
     //保持数据的一致性和完整性 @Transactional
     @Transactional
     public void adddish(DishDto dishDto, HttpServletRequest request) {
-        Long userid= (Long) request.getSession().getAttribute("employee");
+        Long userid= Long.valueOf(request.getHeader("Employee"));
         if(userid==null){
             userid= 1L;
         }
@@ -56,14 +56,13 @@ public class DishServiceimpl extends ServiceImpl<DishMapper, Dish> implements Di
             item.setUpdateUser(finalUserid);
             return item;
         }).collect(Collectors.toList());
-
         dishFlavorService.saveBatch(list);
 
     }
 
     @Transactional
     public void uplodadish(DishDto dishDto, HttpServletRequest request) {
-        Long userid= (Long) request.getSession().getAttribute("employee");
+        Long userid= Long.valueOf(request.getHeader("Employee"));
         if(userid==null){
             userid= 1L;
         }
@@ -87,8 +86,6 @@ public class DishServiceimpl extends ServiceImpl<DishMapper, Dish> implements Di
             item.setUpdateUser(finalUserid);
             return item;
         }).collect(Collectors.toList());
-
-//        dishFlavorService.saveBatch(list);
         dishFlavorService.saveOrUpdateBatch(list);
     }
 

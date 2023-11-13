@@ -41,6 +41,7 @@ public class User implements Serializable {
     //状态 0:禁用，1:正常
     private Integer status;
 
-    //设置密码
-    private String password;
+    //当前门店id
+    private Long employeeId;
+
 }

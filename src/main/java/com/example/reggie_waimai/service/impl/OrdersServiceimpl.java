@@ -36,7 +36,6 @@ public class OrdersServiceimpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public void submittest(@RequestBody Orders orders, HttpServletRequest request) {
         Long userid = (Long) request.getSession().getAttribute("user");
         User user = userService.getById(userid);
-
         //判断当前购物车是否为空
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(ShoppingCart::getUserId, userid);

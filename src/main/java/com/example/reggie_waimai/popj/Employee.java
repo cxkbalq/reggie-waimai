@@ -37,4 +37,8 @@ public class Employee implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
+    //这个是负责一些权限的
+    //1 2 3 4 权限等级依次递增
+    private Integer root;
+
 }

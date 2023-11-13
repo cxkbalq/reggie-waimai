@@ -15,6 +15,9 @@ public class ShoppingCart implements Serializable {
 
     private Long id;
 
+    //当前门店id
+    private Long employeeId;
+
     //名称
     private String name;
 

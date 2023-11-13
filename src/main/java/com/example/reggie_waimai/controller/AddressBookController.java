@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,8 +31,13 @@ public class AddressBookController {
      * 新增
      */
     @PostMapping
-    public R<AddressBook> save(@RequestBody AddressBook addressBook) {
-        addressBook.setUserId(BaseContext.getCurrentId());
+    public R<AddressBook> save(@RequestBody AddressBook addressBook, HttpServletRequest request) {
+        Long userid=(Long)request.getSession().getAttribute("user");
+        addressBook.setUserId(userid);
+        addressBook.setCreateTime(LocalDateTime.now());
+        addressBook.setUpdateTime(LocalDateTime.now());
+        addressBook.setUpdateUser(userid);
+        addressBook.setCreateUser(userid);
         log.info("addressBook:{}", addressBook);
         addressBookService.save(addressBook);
         return R.success(addressBook);
@@ -41,10 +47,11 @@ public class AddressBookController {
      * 设置默认地址
      */
     @PutMapping("default")
-    public R<AddressBook> setDefault(@RequestBody AddressBook addressBook) {
+    public R<AddressBook> setDefault(@RequestBody AddressBook addressBook,HttpServletRequest request) {
+        Long userid=(Long)request.getSession().getAttribute("user");
         log.info("addressBook:{}", addressBook);
         LambdaUpdateWrapper<AddressBook> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
+        wrapper.eq(AddressBook::getUserId, userid);
         wrapper.set(AddressBook::getIsDefault, 0);
         //SQL:update address_book set is_default = 0 where user_id = ?
         addressBookService.update(wrapper);
@@ -73,9 +80,10 @@ public class AddressBookController {
      * 查询默认地址
      */
     @GetMapping("default")
-    public R<AddressBook> getDefault() {
+    public R<AddressBook> getDefault(HttpServletRequest request) {
+        Long userid=(Long)request.getSession().getAttribute("user");
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
+        queryWrapper.eq(AddressBook::getUserId, userid);
         queryWrapper.eq(AddressBook::getIsDefault, 1);
 
         //SQL:select * from address_book where user_id = ? and is_default = 1
@@ -92,8 +100,9 @@ public class AddressBookController {
      * 查询指定用户的全部地址
      */
     @GetMapping("/list")
-    public R<List<AddressBook>> list(AddressBook addressBook) {
-        addressBook.setUserId(BaseContext.getCurrentId());
+    public R<List<AddressBook>> list(AddressBook addressBook,HttpServletRequest request) {
+        Long userid=(Long)request.getSession().getAttribute("user");
+        addressBook.setUserId(userid);
         log.info("addressBook:{}", addressBook);
 
         //条件构造器

@@ -89,4 +89,7 @@ public class AddressBook implements Serializable {
 
     //是否删除
     private Integer isDeleted;
+
+    //当前门店id
+    private Long employeeId;
 }

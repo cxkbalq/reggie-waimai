@@ -24,12 +24,18 @@
             <div class="divContainer">
                 <el-input placeholder=" 请输入手机号码" v-model="form.phone"  maxlength='20'/></el-input>
                 <div class="divSplit"></div>
-                <el-input placeholder=" 请输入验证码" v-model="form.code"  maxlength='20'/></el-input>
-                <span @click='getCode'>获取验证码</span>
+                <el-input placeholder=" 请输入验证码" v-model="form.code" @click="getCode" maxlength='20'/></el-input>
+                <span @click='getCode'>"获取验证码"</span>
+
+<!--                <el-button class="code-button" :disabled="codeBtnDisabled" @click="getCode" v-model="">-->
+<!--                    <span v-if="!codeBtnDisabled">获取验证码</span>-->
+<!--                    <span v-else>重新发送({{ countDownTime }})</span>-->
+<!--                </el-button>-->
             </div>
             <div class="divMsg" v-if="msgFlag">手机号输入不正确，请重新输入</div>
             <el-button type="primary" :class="{btnSubmit:1===1,btnNoPhone:!form.phone,btnPhone:form.phone}" @click="btnLogin">登录</el-button>
         </div>
+
         <!-- 开发环境版本，包含了有帮助的命令行警告 -->
         <script src="../../backend/plugins/vue/vue.js"></script>
         <!-- 引入组件库 -->
@@ -69,10 +75,16 @@
                             'url': '/user/sendMsg',
                             'method': 'post',
                         data:{phone:this.form.phone}
-                        })
+                        }),
+                            //alert("获取验证码成功")
+                        this.$message({
+                            message: '验证码发送成功啦，请注意查收哦！',
+                            type: 'success'
+                        });
                         // sendMsgApi({phone:this.form.phone})
                     }else{
                         this.msgFlag = true
+                        this.$message.error('验证码发送错误，请重新刷新网页试试哦！');
                     }
                 },
                 async btnLogin(){

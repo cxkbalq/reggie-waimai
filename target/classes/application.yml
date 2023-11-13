@@ -56,10 +56,9 @@ aliyun:
   oss:
 
     endpoint: https://oss-cn-beijing.aliyuncs.com
-#    accessKeyId: LTAI5tAQus6jtJ1M87WyjbVR
-#    accessKeySecret: LQoc7b4EjaKCQ2M5fgCdMdjsKFZIml
+    #    accessKeyId: LTAI5tAQus6jtJ1M87WyjbVR
+    #    accessKeySecret: LQoc7b4EjaKCQ2M5fgCdMdjsKFZIml
     accessKeyId: LTAI5tQR123CUiXd6VmYpGVx
     accessKeySecret: Hh2y9Re2i79ihM6l21oivX4fA76axy
     bucketName: cxkbalq01demo
     templateCode: SMS_288735054
-

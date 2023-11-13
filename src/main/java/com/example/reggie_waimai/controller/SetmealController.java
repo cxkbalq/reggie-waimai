@@ -16,6 +16,9 @@ import com.example.reggie_waimai.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +43,7 @@ public class SetmealController {
     保存套餐信息
     */
     @PostMapping()
+    @CacheEvict(value = "Setmeal",allEntries = true)
     public R<String> addmeal(HttpServletRequest request,@RequestBody SetmealDto setmealDto){
         setmealService.save(request,setmealDto);
         return R.success("套餐添加成功");
@@ -49,8 +53,8 @@ public class SetmealController {
     分页展示套餐信息
     */
     @GetMapping("/page")
-    public R<Page> showmeal(Integer page, Integer pageSize, String name){
-        R<Page> r= setmealService.showmeal(page,pageSize,name);
+    public R<Page> showmeal(Integer page, Integer pageSize, String name,HttpServletRequest request){
+        R<Page> r= setmealService.showmeal(page,pageSize,name,request);
         return r;
     }
 
@@ -59,6 +63,7 @@ public class SetmealController {
     删除套餐信息
     */
     @DeleteMapping()
+    @CacheEvict(value = "Setmeal",allEntries = true)
     public R<String> delete(@RequestParam("ids") List<Long> ids){
         //查询当前菜单状态
         LambdaQueryWrapper<Setmeal> lambdaQueryWrapper=new LambdaQueryWrapper<>();
@@ -80,6 +85,7 @@ public class SetmealController {
     }
 
     @PutMapping()
+    @CacheEvict(value = "Setmeal",allEntries = true)
     public R<String> upload(HttpServletRequest request, @RequestBody SetmealDto setmealDto){
         setmealService.upload(request, setmealDto);
         return R.success("修改成功");
@@ -95,6 +101,7 @@ public class SetmealController {
     }
 
 
+    @Cacheable(value = "Setmeal",key = "#category.categoryId+'_'+#category.categoryId")
     @GetMapping("/list")
     public R<List<Setmeal>> menushow(Setmeal category){
         //条件构造

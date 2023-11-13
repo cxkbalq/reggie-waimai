@@ -2,6 +2,7 @@ package com.example.reggie_waimai.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.reggie_waimai.common.BaseContext;
 import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.popj.Category;
 import com.example.reggie_waimai.service.CategoryService;
@@ -16,18 +17,29 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/category")
+@CrossOrigin(origins = "http://localhost:8081") // 允许跨域访问的前端地址
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+    private final BaseContext baseContext;
+    @Autowired
+    public CategoryController(BaseContext baseContext) {
+        this.baseContext = baseContext;
+    }
 
     /*
     显示分类信息
     * */
     @GetMapping("/page")
-    public R<Page> selectmenu(int page, int pageSize) {
+    public R<Page> selectmenu(int page, int pageSize,HttpServletRequest request) {
+        Long userid= Long.valueOf(request.getHeader("Employee"));
+//        Long userid = Long.valueOf(request.getHeader("Employee"));
         Page<Category> page1 = new Page<>(page, pageSize);
-        Page page2 = categoryService.page(page1);
+        LambdaQueryWrapper<Category>lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Category::getEmployeeId,userid);
+        Long employeeId = baseContext.getEmployeeId();
+        Page page2 = categoryService.page(page1,lambdaQueryWrapper);
         return R.success(page2);
     }
 
@@ -36,11 +48,12 @@ public class CategoryController {
     * */
     @PostMapping()
     public R<String> addmenu(HttpServletRequest request, @RequestBody Category category) {
-        Long userid = (Long) request.getSession().getAttribute("employee");
+        Long userid = Long.valueOf(request.getHeader("Employee"));
         category.setCreateUser(userid);
         category.setUpdateUser(userid);
         category.setCreateTime(LocalDateTime.now());
         category.setUpdateTime(LocalDateTime.now());
+        category.setEmployeeId(userid);
         categoryService.save(category);
         return R.success("添加成功");
     }
@@ -52,8 +65,8 @@ public class CategoryController {
     * */
 
     @DeleteMapping()
-    public R<String> deletemenu(Long ids) {
-        boolean t = categoryService.removeById(ids);
+    public R<String> deletemenu(Long id) {
+        boolean t = categoryService.removeById(id);
         if (t) {
             return R.success("删除成功");
         } else {
@@ -66,7 +79,7 @@ public class CategoryController {
     * */
     @PutMapping()
     public R<String> updatemenu(HttpServletRequest request, @RequestBody Category category) {
-        Long userid = (Long) request.getSession().getAttribute("employee");
+        Long userid = Long.valueOf(request.getHeader("Employee"));
         category.setUpdateUser(userid);
         category.setUpdateTime(LocalDateTime.now());
         categoryService.updateById(category);
@@ -74,13 +87,15 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public R<List<Category>> menushow(Category category){
+    public R<List<Category>> menushow(Category category,HttpServletRequest request){
+        Long userid = Long.valueOf(request.getHeader("Employee"));
         //条件构造
         LambdaQueryWrapper<Category> lambdaQueryWrapper=new LambdaQueryWrapper<>();
         //当 category.getType() 不为 null 时，才会添加等值条件：即 Category 对象中的 type 属性等于 category.getType()
         lambdaQueryWrapper.eq(category.getType()!=null,Category::getType,category.getType());
         //orderByAsc() 方法用于升序排序，orderByDesc() 方法用于降序排序
         lambdaQueryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        lambdaQueryWrapper.eq(Category::getEmployeeId,userid);
 
         List<Category> list=categoryService.list(lambdaQueryWrapper);
         return R.success(list);

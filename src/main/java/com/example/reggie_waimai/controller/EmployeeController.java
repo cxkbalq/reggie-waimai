@@ -1,23 +1,17 @@
 package com.example.reggie_waimai.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.reggie_waimai.common.BaseContext;
 import com.example.reggie_waimai.popj.Employee;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.service.EmployeeService;
 import com.example.reggie_waimai.utils.JwtUtils;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 //import com.example.reggie_waimai.filter.test;
@@ -26,9 +20,11 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/employee")
+@CrossOrigin(origins = "http://localhost:8081") // 允许跨域访问的前端地址
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
     /*
     用户登录
     */
@@ -51,13 +47,20 @@ public class EmployeeController {
         }
         Map<String, Object> claims=new HashMap<>();
         claims.put("id", emp.getId());
-        claims.put("username",emp.getPassword());
-        claims.put("password",emp.getPassword());
+        claims.put("username",emp.getUsername());
+//        claims.put("password",emp.getPassword());
         JwtUtils jwtUtils=new JwtUtils();
+        //创建jwt令牌，并返回给前端，为了减少代码量，将jwt储存在msg里了
         String jwt= jwtUtils.generateJwt(claims);
+        R r=new R<>();
+        r.setMsg(jwt);
+        r.setCode(1);
+        r.setData(emp);
         log.info("当前jwt：{}",jwt);
+        //将当前employeeid储存到Session以及线程中
         request.getSession().setAttribute("employee",emp.getId());
-        return R.success(emp);
+        BaseContext.setEmployeeId(emp.getId());
+        return r;
     }
 
     /*
@@ -76,7 +79,10 @@ public class EmployeeController {
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        Long userid= (Long) request.getSession().getAttribute("employee");
+        Long userid= Long.valueOf(request.getHeader("Employee"));
+        if(userid!=1l){
+            R.error("权限不足，请登录管理员账号，进行添加");
+        }
         employee.setCreateUser(userid);
         employee.setUpdateUser(userid);
         employeeService.save(employee);
@@ -93,7 +99,6 @@ public class EmployeeController {
         LambdaQueryWrapper<Employee> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         if(name!=null){
             lambdaQueryWrapper.like(Employee::getName,name);
-
         }
         Page page2= employeeService.page(page1,lambdaQueryWrapper);
         return R.success(page2);
@@ -105,7 +110,7 @@ public class EmployeeController {
     */
     @PutMapping
     public R<String> UpdateUserS(HttpServletRequest request, @RequestBody Employee employee){
-        Long userid= (Long) request.getSession().getAttribute("employee");
+        Long userid= Long.valueOf(request.getHeader("Employee"));
         if(userid==null){
             userid= 1L;
         }

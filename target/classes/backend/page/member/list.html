@@ -92,7 +92,7 @@
       </el-table>
       <el-pagination
         class="pageList"
-        :page-sizes="[2]"
+        :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="counts"
@@ -118,7 +118,7 @@
              input: '',
              counts: 0,
              page: 1,
-             pageSize: 2,
+             pageSize: 10,
              tableData : [],
              id : '',
              status : '',
@@ -127,10 +127,7 @@
         computed: {},
         created() {
           this.init()
-            if(localStorage.getItem('userInfo') != null){
-                //获取当前登录员工的账号，并赋值给模型数据user
-                this.user = JSON.parse(localStorage.getItem('userInfo')).username
-            }
+          this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
         mounted() {
         },

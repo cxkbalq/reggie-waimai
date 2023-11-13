@@ -172,23 +172,24 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     }
 
     @Override
-    public R<Page> showmeal(Integer page, Integer pageSize, String name) {
+    public R<Page> showmeal(Integer page, Integer pageSize, String name,HttpServletRequest request) {
+        //获得管理id
+        Long userid=(Long)request.getSession().getAttribute("employee");
         log.info("{}{}",page.toString(),pageSize.toString());
         //构造分页查询器
         Page<Setmeal> page1=new Page<>(page,pageSize);
         //添加查询条件
         LambdaQueryWrapper<Setmeal> lambdaQueryWrapper1=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper1.eq(Setmeal::getCreateUser,userid);
         if(name!=null){
-
             lambdaQueryWrapper1.like(Setmeal::getName,name);
-
         }
-        Page page2 = this.page(page1,lambdaQueryWrapper1);
-        Page<SetmealDto> dtoPage=new Page<>();
 
+        Page<Setmeal> page2 = this.page(page1,lambdaQueryWrapper1);
+        Page<SetmealDto> dtoPage=new Page<>();
+        BeanUtils.copyProperties(page2,dtoPage,"records");
         //创建空集合以用来接收page1
-        List<SetmealDto> list=new ArrayList<>();
-        list= page1.getRecords().stream().map(i->{
+        List<SetmealDto> list= page2.getRecords().stream().map(i->{
             SetmealDto setmealDto=new SetmealDto();
             BeanUtils.copyProperties(i,setmealDto);
             log.info("{}", i.getCategoryId());

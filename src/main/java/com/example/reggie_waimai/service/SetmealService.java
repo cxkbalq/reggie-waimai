@@ -24,7 +24,7 @@ public interface SetmealService extends IService<Setmeal> {
     public void uploadsta(HttpServletRequest request,List<Long> list,Integer sta);
 
 
-    public R<Page> showmeal(Integer page, Integer pageSize, String name);
+    public R<Page> showmeal(Integer page, Integer pageSize, String name,HttpServletRequest request);
 
     public R<SetmealDto> huidu_setmeal(HttpServletRequest request,Long id);
     public R<SetmealDto> huidu_setmeal2(Long id);

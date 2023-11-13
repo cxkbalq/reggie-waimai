@@ -1,6 +1,7 @@
 package com.example.reggie_waimai.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.reggie_waimai.common.BaseContext;
 import com.example.reggie_waimai.popj.CodeLogin;
 import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.popj.User;
@@ -13,8 +14,8 @@ import com.example.reggie_waimai.utils.SMSUtils;
 import com.example.reggie_waimai.utils.ValidateCodeUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -35,9 +36,12 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("code={}",code);
             //调用阿里云提供的短信服务API完成发送短信
-           // smsUtils.sendMessage("阿里云短信测试",phone,code);
+            //smsUtils.sendMessage("阿里云短信测试",phone,code);
+
+            //将生成的验证码储存到redis中，并设置有效时间为5分钟
+            redisTemplate.opsForValue().set(phone,code,5, TimeUnit.MINUTES);
             //需要将生成的验证码保存到redis
-            session.setAttribute(phone,code);
+            //session.setAttribute(phone,code);
             return R.success("手机验证码短信发送成功");
         }
         return R.error("短信发送失败");
@@ -46,11 +50,12 @@ public class UserController {
     @PostMapping("/login")
     public R<String> login(@RequestBody CodeLogin codeLogin, HttpSession session){
 
-        // 获取存入的值
-        String code = (String) session.getAttribute(codeLogin.getPhone());
+        // 获取输入的值
+        String code = (String) codeLogin.getCode();
+        String phone1 = (String) redisTemplate.opsForValue().get(codeLogin.getPhone());
         //获取手机号
         String phone = codeLogin.getPhone();
-        if(code.equals(codeLogin.getCode())||code!=null){
+        if(code.equals(phone1)&&code!=null){
             LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(User::getPhone,phone);
 
@@ -63,10 +68,33 @@ public class UserController {
                 userService.save(user);
             }
             session.setAttribute("user",user.getId());
-
+            BaseContext.setCurrentId(1713534662914818050l);
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            //如果登录成功删除键值
+            redisTemplate.delete("phone");
             return R.success("登录成功");
         }
         else {
+            BaseContext.setCurrentId(1713534662914818050l);
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
             session.setAttribute("erro","1");
             return R.error("验证码或号码错误");
 

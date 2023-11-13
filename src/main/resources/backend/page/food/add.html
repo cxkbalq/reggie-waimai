@@ -455,7 +455,7 @@
                 delete params.dishFlavors
                 if(!this.imageUrl){
                   this.$message.error('请上传菜品图片')
-                  return 
+                  return
                 }
                 if (this.actionType == 'add') {
                   delete params.id
@@ -531,7 +531,7 @@
               return file
             }
           },
-          
+
           goBack(){
             window.parent.menuHandle({
               id: '4',
