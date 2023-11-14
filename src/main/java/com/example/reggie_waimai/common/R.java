@@ -9,9 +9,10 @@ import java.util.Map;
  * @param <T>
  */
 @Data
+//我顶我顶我顶我
 public class R<T> {
 
-    private Integer code; //编码：1成功，0和其它数字为失败
+    private Integer code; //编1码：1成功，0和其它数字为失败
 
     private String msg; //错误信息
 
