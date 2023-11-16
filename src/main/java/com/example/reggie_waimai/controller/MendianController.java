@@ -37,7 +37,7 @@ public class MendianController {
     }
 
     //状态更改
-   @PutMapping
+   @PutMapping()
     public R<String> UpdateUserS(HttpServletRequest request, @RequestBody Mendian mendian){
         Long userid= (Long) request.getSession().getAttribute("employee");
         if(userid==null){
@@ -66,6 +66,15 @@ public class MendianController {
         mendianDto.setEmployeeList(list);
         //补全门店信息
         return R.success(null);
+    }
+    //查询单个门店信息，用于信息回读
+    @GetMapping("/{id}")
+    public R<Mendian> GetMendian(@PathVariable Long id){
+
+        LambdaQueryWrapper<Mendian> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Mendian::getId,id);
+        Mendian one = mendianService.getOne(lambdaQueryWrapper);
+        return R.success(one);
     }
 
 
