@@ -35,7 +35,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     @Transactional
     public void save(HttpServletRequest request, SetmealDto setmealDto) {
         //补充缺少的信息setmeal
-        Long root_id=(Long)request.getSession().getAttribute("employee");
+        Long root_id=Long.valueOf(request.getHeader("Employee"));
         setmealDto.setUpdateTime(LocalDateTime.now());
         setmealDto.setCreateTime(LocalDateTime.now());
         if(root_id==null){
@@ -114,7 +114,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     @Transactional
     public void upload(HttpServletRequest request, SetmealDto setmealDto) {
         //补充缺少的信息setmeal
-        Long root_id=(Long)request.getSession().getAttribute("employee");
+        Long root_id=Long.valueOf(request.getHeader("Employee"));
         setmealDto.setUpdateTime(LocalDateTime.now());
         setmealDto.setUpdateUser(root_id);
         if(root_id==null){
@@ -158,7 +158,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
             Setmeal setmeal=new Setmeal();
             setmeal=this.getById(i);
             setmeal.setUpdateTime(LocalDateTime.now());
-            Long root_id=(Long)request.getSession().getAttribute("employee");
+            Long root_id=Long.valueOf(request.getHeader("Employee"));
             if(root_id==null){
                 root_id=1l;
             }
@@ -171,10 +171,12 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         });
     }
 
+    //分页查询加条件查询
+    //分页查询加条件查询
     @Override
     public R<Page> showmeal(Integer page, Integer pageSize, String name,HttpServletRequest request) {
         //获得管理id
-        Long userid=(Long)request.getSession().getAttribute("employee");
+        Long userid=Long.valueOf(request.getHeader("Employee"));
         log.info("{}{}",page.toString(),pageSize.toString());
         //构造分页查询器
         Page<Setmeal> page1=new Page<>(page,pageSize);

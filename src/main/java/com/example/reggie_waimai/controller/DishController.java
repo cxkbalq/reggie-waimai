@@ -52,7 +52,7 @@ public class DishController {
         Page<Dish> page3 = new Page<>(page, pageSize);
         //构建查询条件
         LambdaQueryWrapper<Dish> lambdaQueryWrapper3=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper3.eq(Dish::getCreateUser,userid);
+//        lambdaQueryWrapper3.eq(Dish::getCreateUser,userid);
         if(name!=null){
             lambdaQueryWrapper3.like(Dish::getName,name);
         }
