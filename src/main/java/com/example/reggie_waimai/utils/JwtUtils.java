@@ -10,7 +10,7 @@ import java.util.Map;
 public class JwtUtils {
 
     private static String signKey = "cxkbalq";
-    private static Long expire = 40000*1000L;
+    private static Long expire = 6*3600*1000L;
 
     /**
      * 生成JWT令牌
@@ -25,7 +25,6 @@ public class JwtUtils {
                 .compact();
         return jwt;
     }
-
     /**
      * 解析JWT令牌
      * @param jwt JWT令牌
