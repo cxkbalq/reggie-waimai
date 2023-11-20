@@ -33,7 +33,7 @@ public class JwtFilter implements Filter {
         //排除因为跨域问题发送的确认请求
         if(method.equals("OPTIONS")){
             filterChain.doFilter(servletRequest,servletResponse);
-            log.info("当前为cors验证请求");
+            log.info("当前为cors验证请求，直接放行");
             return;
         }
         //设置除了跨域请求的所有请求体,如何对OPTIONS进行了处理，会出现错误
@@ -41,13 +41,13 @@ public class JwtFilter implements Filter {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,PUT"); // 允许的请求方法
         response.setHeader("Access-Control-Max-Age", "3600"); // 预检请求的有效期，单位：秒
         //如果请求里包含login直接放行,以及图片请求
-        if(url.contains("login")||url.contains("common")){
+        if(url.contains("login")||url.contains("common")||url.contains("sendMsg")){
             log.info("登录页面，放行。。。");
             filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
         String jwt=request.getHeader("Jwttoken");
-//        判读jwt是否存在
+        //判读jwt是否存在
         if(!StringUtils.hasLength(jwt)){
             R result= R.success("jwt_exp");
             result.setMsg("NOT_LOGIN");

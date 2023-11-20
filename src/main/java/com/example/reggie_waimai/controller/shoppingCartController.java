@@ -19,14 +19,14 @@ public class shoppingCartController {
     @PostMapping("/add")
     public R<ShoppingCart> addShopping(@RequestBody ShoppingCart shoppingCart, HttpServletRequest request){
         //17856796238
-        Long userid=(Long)request.getSession().getAttribute("user");
+        Long userid=Long.valueOf(request.getHeader("user"));
         R<ShoppingCart> stringR = shoppingCartService.addShoppings(shoppingCart, userid);
         return stringR;
     }
     @PostMapping("/sub")
     public R<ShoppingCart> subShopping(@RequestBody ShoppingCart shoppingCart, HttpServletRequest request){
         //17856796238
-        Long userid=(Long)request.getSession().getAttribute("user");
+        Long userid=Long.valueOf(request.getHeader("user"));
         R<ShoppingCart> stringR = shoppingCartService.subShoppings(shoppingCart, userid);
         return stringR;
     }
@@ -35,7 +35,7 @@ public class shoppingCartController {
 
     @GetMapping("/list")
     public R<List<ShoppingCart>> listR(HttpServletRequest request){
-        Long userid=(Long)request.getSession().getAttribute("user");
+        Long userid=Long.valueOf(request.getHeader("user"));
       //  Long userid=BaseContext.getCurrentId();
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper=new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(ShoppingCart::getUserId,userid);
@@ -46,7 +46,7 @@ public class shoppingCartController {
 
     @DeleteMapping("/clean")
     public R<String> clean(HttpServletRequest request){
-        Long userid=(Long)request.getSession().getAttribute("user");
+        Long userid=Long.valueOf(request.getHeader("user"));
         Long currentId = BaseContext.getCurrentId();
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper=new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(ShoppingCart::getUserId,userid);

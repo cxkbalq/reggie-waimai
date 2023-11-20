@@ -30,7 +30,7 @@ public class OrdersController {
 
     //提交订单
     //提交订单
-    @PostMapping("/submiti")
+    @PostMapping("/submit")
     public R<String> submittest(@RequestBody Orders orders, HttpServletRequest request) {
         ordersService.submittest(orders, request);
         return R.success("下单成功");

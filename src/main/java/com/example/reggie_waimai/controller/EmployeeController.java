@@ -38,6 +38,7 @@ public class EmployeeController {
                 .eq(Employee::getUsername, employee.getUsername())
                 .eq(Employee::getPassword, password);
         Employee emp = employeeService.getOne(lambdaQueryWrapper);
+        emp.setPassword("密码是不会给你看的，哈哈哈哈哈");
         //判断传入数据是否为空
         if (emp == null) {
             return R.error("登录失败");

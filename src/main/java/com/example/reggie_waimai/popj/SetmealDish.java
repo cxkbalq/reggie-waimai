@@ -37,6 +37,7 @@ public class SetmealDish implements Serializable {
     //份数
     private Integer copies;
 
+    private String image;
 
     //排序
     private Integer sort;

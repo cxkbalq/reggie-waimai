@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie_waimai.common.BaseContext;
 import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.popj.Category;
+import com.example.reggie_waimai.popj.Setmeal;
 import com.example.reggie_waimai.service.CategoryService;
+import com.example.reggie_waimai.service.SetmealDishService;
+import com.example.reggie_waimai.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,10 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private SetmealService setmealService;
+    @Autowired
+    private SetmealDishService setmealDishService;
     private final BaseContext baseContext;
     @Autowired
     public CategoryController(BaseContext baseContext) {
@@ -66,7 +73,13 @@ public class CategoryController {
 
     @DeleteMapping()
     public R<String> deletemenu(Long id) {
+        //删除当前套餐分类，会自动删除所有属于此套餐分类下的的子套餐
         boolean t = categoryService.removeById(id);
+        LambdaQueryWrapper<Setmeal> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Setmeal::getCategoryId,id);
+        List<Setmeal> list = setmealService.list(lambdaQueryWrapper);
+        list.stream().forEach(s->setmealDishService.removeById(s.getId()));
+        setmealService.remove(lambdaQueryWrapper);
         if (t) {
             return R.success("删除成功");
         } else {

@@ -39,9 +39,9 @@ public class UserController {
             //smsUtils.sendMessage("阿里云短信测试",phone,code);
 
             //将生成的验证码储存到redis中，并设置有效时间为5分钟
-            redisTemplate.opsForValue().set(phone,code,5, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(phone,"1234",5, TimeUnit.MINUTES);
             //需要将生成的验证码保存到redis
-            //session.setAttribute(phone,code);
+            session.setAttribute(phone,code);
             return R.success("手机验证码短信发送成功");
         }
         return R.error("短信发送失败");
@@ -68,36 +68,20 @@ public class UserController {
                 userService.save(user);
             }
             session.setAttribute("user",user.getId());
-            BaseContext.setCurrentId(1713534662914818050l);
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
+            log.info(session.getAttribute("user").toString());
+            log.info(session.getAttribute("user").toString());
+            log.info(session.getAttribute("user").toString());
+
             //如果登录成功删除键值
             redisTemplate.delete("phone");
-            return R.success("登录成功");
+            R r=R.success("登录成功");
+            user.setEmployeeId(0l);
+            r.setData(user);
+            return r;
         }
         else {
-            BaseContext.setCurrentId(1713534662914818050l);
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
-            log.info("当前线程设置id为：{}",BaseContext.getCurrentId().toString());
             session.setAttribute("erro","1");
             return R.error("验证码或号码错误");
-
         }
     }
 

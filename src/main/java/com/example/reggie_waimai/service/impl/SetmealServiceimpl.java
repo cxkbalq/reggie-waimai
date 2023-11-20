@@ -34,6 +34,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     //开启事务回滚，保证数据的统一性
     @Transactional
     public void save(HttpServletRequest request, SetmealDto setmealDto) {
+        log.info(setmealDto.toString());
         //补充缺少的信息setmeal
         Long root_id=Long.valueOf(request.getHeader("Employee"));
         setmealDto.setUpdateTime(LocalDateTime.now());
@@ -45,6 +46,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         setmealDto.setCreateUser(root_id);
         Setmeal setmeal=new Setmeal();
         BeanUtils.copyProperties(setmealDto,setmeal);
+        setmeal.setImage(setmealDto.getImage());
         //保存setmeal信息
         this.save(setmeal);
         //获取setmeal_id
