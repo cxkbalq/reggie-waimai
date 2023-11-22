@@ -81,9 +81,9 @@ public class EmployeeController {
         employee.setUpdateTime(LocalDateTime.now());
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         Long userid= Long.valueOf(request.getHeader("Employee"));
-        if(userid!=1l){
-            R.error("权限不足，请登录管理员账号，进行添加");
-        }
+//        if(userid!=1l){
+//            R.error("权限不足，请登录管理员账号，进行添加");
+//        }
         employee.setCreateUser(userid);
         employee.setUpdateUser(userid);
         employeeService.save(employee);

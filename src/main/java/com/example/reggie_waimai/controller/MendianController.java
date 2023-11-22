@@ -76,6 +76,11 @@ public class MendianController {
         Mendian one = mendianService.getOne(lambdaQueryWrapper);
         return R.success(one);
     }
-
+    //店面展示手机端
+    @GetMapping()
+    public R<List<Mendian>> Getmain(){
+        List<Mendian> list = mendianService.list();
+        return R.success(list);
+    }
 
 }

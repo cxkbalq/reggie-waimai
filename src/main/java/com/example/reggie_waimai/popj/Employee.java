@@ -41,4 +41,7 @@ public class Employee implements Serializable {
     //1 2 3 4 权限等级依次递增
     private Integer root;
 
+    //这个是门店关联的id
+    private Long mendianId;
+
 }
