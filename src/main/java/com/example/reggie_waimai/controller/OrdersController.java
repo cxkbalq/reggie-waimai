@@ -81,11 +81,10 @@ public class OrdersController {
         lambdaQueryWrapper.orderByDesc(Orders::getOrderTime);
         //  添加查询条件
         if (number != null) {
-            lambdaQueryWrapper.like(Orders::getNumber, number);
+            lambdaQueryWrapper.like(Orders::getUserId,number);
         }
         if (beginTime != null && endTime != null) {
             lambdaQueryWrapper.between(Orders::getOrderTime, beginTime, endTime);
-
         }
 
         Page pagedto = ordersService.page(page1, lambdaQueryWrapper);
