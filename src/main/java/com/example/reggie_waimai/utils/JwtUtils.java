@@ -10,7 +10,7 @@ import java.util.Map;
 public class JwtUtils {
 
     private static String signKey = "cxkbalq";
-    private static Long expire = 6*3600*1000L;
+    private static Long expire = 24*3600*1000L;
 //    private static Long expire = 5*1000L;
 
     /**

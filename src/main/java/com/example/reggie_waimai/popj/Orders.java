@@ -27,8 +27,8 @@ public class Orders implements Serializable {
 
     //地址id
     private Long addressBookId;
-    //当前门店id
-    private Long employeeId;
+    //这个是门店关联的id
+    private Long mendianId;
 
 
     //下单时间

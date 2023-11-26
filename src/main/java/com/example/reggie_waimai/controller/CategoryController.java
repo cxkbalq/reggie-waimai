@@ -40,12 +40,11 @@ public class CategoryController {
     * */
     @GetMapping("/page")
     public R<Page> selectmenu(int page, int pageSize,HttpServletRequest request) {
-        Long userid= Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
 //        Long userid = Long.valueOf(request.getHeader("Employee"));
         Page<Category> page1 = new Page<>(page, pageSize);
         LambdaQueryWrapper<Category>lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Category::getEmployeeId,userid);
-        Long employeeId = baseContext.getEmployeeId();
+        lambdaQueryWrapper.eq(Category::getMendianId,mendianID);
         Page page2 = categoryService.page(page1,lambdaQueryWrapper);
         return R.success(page2);
     }
@@ -55,12 +54,13 @@ public class CategoryController {
     * */
     @PostMapping()
     public R<String> addmenu(HttpServletRequest request, @RequestBody Category category) {
-        Long userid = Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
+        Long userid= Long.valueOf(request.getHeader("Employee"));
         category.setCreateUser(userid);
         category.setUpdateUser(userid);
         category.setCreateTime(LocalDateTime.now());
         category.setUpdateTime(LocalDateTime.now());
-        category.setEmployeeId(userid);
+        category.setMendianId(mendianID);
         categoryService.save(category);
         return R.success("添加成功");
     }
@@ -101,15 +101,21 @@ public class CategoryController {
 
     @GetMapping("/list")
     public R<List<Category>> menushow(Category category,HttpServletRequest request){
-        Long userid = Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
+        //解决用户端为登录出现的bug
+        if(mendianID==null){
+            R r=new R<>();
+            r.setMsg("NOT_LOGIN");
+            r.setCode(1);
+            return r;
+        }
         //条件构造
         LambdaQueryWrapper<Category> lambdaQueryWrapper=new LambdaQueryWrapper<>();
         //当 category.getType() 不为 null 时，才会添加等值条件：即 Category 对象中的 type 属性等于 category.getType()
         lambdaQueryWrapper.eq(category.getType()!=null,Category::getType,category.getType());
         //orderByAsc() 方法用于升序排序，orderByDesc() 方法用于降序排序
         lambdaQueryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
-        lambdaQueryWrapper.eq(Category::getEmployeeId,userid);
-
+        lambdaQueryWrapper.eq(Category::getMendianId,mendianID);
         List<Category> list=categoryService.list(lambdaQueryWrapper);
         return R.success(list);
     }

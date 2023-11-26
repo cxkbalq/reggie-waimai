@@ -16,11 +16,8 @@ import java.time.LocalDateTime;
 public class Dish implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    //当前门店id
-    private Long employeeId;
 
     private Long id;
-
 
     //菜品名称
     private String name;
@@ -70,7 +67,7 @@ public class Dish implements Serializable {
     private Long updateUser;
 
 
-    //是否删除
-    private Integer isDeleted;
+    //这个是门店关联的id
+    private Long mendianId;
 
 }

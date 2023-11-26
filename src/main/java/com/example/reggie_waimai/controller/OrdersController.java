@@ -43,12 +43,15 @@ public class OrdersController {
                                int pageSize,
                                Long number,
                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date beginTime,
-                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime,
+                               HttpServletRequest request) {
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         //设置分页参数
         Page<Orders> page1 = new Page<>(page, pageSize);
         //构建查询条件
         LambdaQueryWrapper<Orders> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(Orders::getOrderTime);
+        lambdaQueryWrapper.eq(Orders::getMendianId,mendianID);
         //  添加查询条件
         if (number != null) {
             lambdaQueryWrapper.like(Orders::getNumber, number);
@@ -68,7 +71,9 @@ public class OrdersController {
                                 int pageSize,
                                 Long number,
                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date beginTime,
-                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime
+                               ) {
+
         //设置分页参数
         Page<Orders> page1 = new Page<>(page, pageSize);
         //构建查询条件

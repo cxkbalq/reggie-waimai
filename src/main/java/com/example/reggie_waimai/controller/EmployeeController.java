@@ -38,7 +38,6 @@ public class EmployeeController {
                 .eq(Employee::getUsername, employee.getUsername())
                 .eq(Employee::getPassword, password);
         Employee emp = employeeService.getOne(lambdaQueryWrapper);
-        emp.setPassword("密码是不会给你看的，哈哈哈哈哈");
         //判断传入数据是否为空
         if (emp == null) {
             return R.error("登录失败");
@@ -46,6 +45,7 @@ public class EmployeeController {
         if (emp.getStatus() == 0) {
             return R.error("账号已冻结");
         }
+        emp.setPassword("密码是不会给你看的，哈哈哈哈哈");
         Map<String, Object> claims=new HashMap<>();
         claims.put("id", emp.getId());
         claims.put("username",emp.getUsername());
@@ -81,11 +81,11 @@ public class EmployeeController {
         employee.setUpdateTime(LocalDateTime.now());
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         Long userid= Long.valueOf(request.getHeader("Employee"));
-//        if(userid!=1l){
-//            R.error("权限不足，请登录管理员账号，进行添加");
-//        }
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         employee.setCreateUser(userid);
         employee.setUpdateUser(userid);
+        employee.setRoot(3);
+        employee.setMendianId(mendianID);
         employeeService.save(employee);
         return R.success("员工增加成功");
     }
@@ -94,13 +94,16 @@ public class EmployeeController {
     */
 
     @GetMapping("/page")
-    public R<Page> selectuser(int page,int pageSize,String name){
+    public R<Page> selectuser(int page,int pageSize,String name,HttpServletRequest request){
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         log.info("page{}pagesize{}name{}",page,pageSize,name);
         Page page1=new Page(page,pageSize);
         LambdaQueryWrapper<Employee> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         if(name!=null){
             lambdaQueryWrapper.like(Employee::getName,name);
         }
+        //只查询当前的门店下的员工
+        lambdaQueryWrapper.eq(Employee::getMendianId,mendianID);
         Page page2= employeeService.page(page1,lambdaQueryWrapper);
         return R.success(page2);
     }
@@ -112,14 +115,30 @@ public class EmployeeController {
     @PutMapping
     public R<String> UpdateUserS(HttpServletRequest request, @RequestBody Employee employee){
         Long userid= Long.valueOf(request.getHeader("Employee"));
+        //防止空指针异常
         if(userid==null){
             userid= 1L;
         }
-        log.info("{}",userid);
-        employee.setUpdateUser(userid);
-        employee.setUpdateTime(LocalDateTime.now());
-        employeeService.updateById(employee);
-        return R.success("状态更改成功");
+        //如果是自己则无法禁用
+        //这个因为一个为Long，一个是long，所以需要进行类型转化，将Long包装类，转变为long
+        if(employee.getId().longValue()==userid){
+            return R.error("你无法禁用自己的账号");
+        }
+        //获得需要修改的权限级别
+        LambdaQueryWrapper<Employee>lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Employee::getId,employee.getId());
+        Employee one = employeeService.getOne(lambdaQueryWrapper);
+        //如果为最高级别，
+        if(one.getRoot()==1){
+            return R.error("你的权限级别无法进行修改");
+        }
+        //如果不为最高级，直接更改
+        else {
+            employee.setUpdateUser(userid);
+            employee.setUpdateTime(LocalDateTime.now());
+            employeeService.updateById(employee);
+            return R.success("状态更改成功");
+        }
     }
     /*
     信息回读

@@ -47,7 +47,7 @@ public class DishController {
     public R<Page> selectmdish(int page, int pageSize,String name,HttpServletRequest request) {
 
         Long userid=Long.valueOf(request.getHeader("Employee"));;
-
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         //设置分页参数
         Page<Dish> page3 = new Page<>(page, pageSize);
         //构建查询条件
@@ -56,6 +56,7 @@ public class DishController {
         if(name!=null){
             lambdaQueryWrapper3.like(Dish::getName,name);
         }
+        lambdaQueryWrapper3.eq(Dish::getMendianId,mendianID);
         Page<Dish> page1 = dishService.page(page3,lambdaQueryWrapper3);
         Page<DishDto> pagedto =new Page<>();
 
@@ -76,7 +77,7 @@ public class DishController {
             //获取分类id以及对应name
             Long id= itme.getCategoryId();
 //            LambdaQueryWrapper <Category> lambdaQueryWrapper1=new LambdaQueryWrapper<>();
-//            lambdaQueryWrapper1.eq(Category::getEmployeeId,userid);
+//            lambdaQueryWrapper1.eq(Category::getMendianId,mendianID);
 //            lambdaQueryWrapper1.eq(Category::getId,id);
 //            Category category=categoryService.getOne(lambdaQueryWrapper1);
                     Category category=categoryService.getById(id);
@@ -139,7 +140,7 @@ public class DishController {
         //构建dish_key
         String key="dish_"+dishDto.getCategoryId()+"_"+dishDto.getStatus();
         redisTemplate.delete(key);
-        return R.success("菜品添加成功");
+        return R.success("菜品更改成功");
     }
 
 
@@ -165,14 +166,14 @@ public class DishController {
     public R<String> upolad(HttpServletRequest request,
                             @PathVariable("status") Integer status,
                             @RequestParam("ids") List<Long> ids){
-
+        Long userid= Long.valueOf(request.getHeader("Employee"));
         List<Dish> list=new ArrayList<>();
         list= ids.stream().map((item) -> {
             Dish dish = new Dish();
             dish = dishService.getById(item);
             dish.setUpdateTime(LocalDateTime.now());
-            if(request.getSession().getAttribute("employee")!=null){
-                dish.setUpdateUser((Long)request.getSession().getAttribute("employee"));
+            if(userid!=null){
+                dish.setUpdateUser(userid);
             }
             dish.setStatus(status);
 

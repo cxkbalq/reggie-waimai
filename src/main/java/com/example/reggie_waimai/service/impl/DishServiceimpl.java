@@ -29,12 +29,13 @@ public class DishServiceimpl extends ServiceImpl<DishMapper, Dish> implements Di
     @Transactional
     public void adddish(DishDto dishDto, HttpServletRequest request) {
         Long userid= Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         if(userid==null){
             userid= 1L;
         }
-
         dishDto.setCreateUser(userid);
         dishDto.setUpdateUser(userid);
+        dishDto.setMendianId(mendianID);
         dishDto.setCreateTime(LocalDateTime.now());
         dishDto.setUpdateTime(LocalDateTime.now());
         //保存菜品的基本信息

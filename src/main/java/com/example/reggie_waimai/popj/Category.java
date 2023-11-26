@@ -54,7 +54,7 @@ public class Category implements Serializable {
     //是否删除
     private Integer isDeleted;
 
-    //当前门店id
-    private Long employeeId;
+    //这个是门店关联的id
+    private Long mendianId;
 
 }

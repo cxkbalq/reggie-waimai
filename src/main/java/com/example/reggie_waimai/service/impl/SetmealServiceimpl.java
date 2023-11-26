@@ -37,6 +37,7 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         log.info(setmealDto.toString());
         //补充缺少的信息setmeal
         Long root_id=Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         setmealDto.setUpdateTime(LocalDateTime.now());
         setmealDto.setCreateTime(LocalDateTime.now());
         if(root_id==null){
@@ -44,9 +45,11 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         }
         setmealDto.setUpdateUser(root_id);
         setmealDto.setCreateUser(root_id);
+        setmealDto.setMendianId(mendianID);
         Setmeal setmeal=new Setmeal();
         BeanUtils.copyProperties(setmealDto,setmeal);
         setmeal.setImage(setmealDto.getImage());
+        setmeal.setMendianId(mendianID);
         //保存setmeal信息
         this.save(setmeal);
         //获取setmeal_id
@@ -122,7 +125,6 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         if(root_id==null){
             root_id=1l;
         }
-
         Setmeal setmeal=new Setmeal();
         BeanUtils.copyProperties(setmealDto,setmeal);
         Long id=setmealDto.getId();
@@ -179,12 +181,13 @@ public class SetmealServiceimpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     public R<Page> showmeal(Integer page, Integer pageSize, String name,HttpServletRequest request) {
         //获得管理id
         Long userid=Long.valueOf(request.getHeader("Employee"));
+        Long mendianID= Long.valueOf(request.getHeader("mendian"));
         log.info("{}{}",page.toString(),pageSize.toString());
         //构造分页查询器
         Page<Setmeal> page1=new Page<>(page,pageSize);
         //添加查询条件
         LambdaQueryWrapper<Setmeal> lambdaQueryWrapper1=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper1.eq(Setmeal::getCreateUser,userid);
+        lambdaQueryWrapper1.eq(Setmeal::getMendianId,mendianID);
         if(name!=null){
             lambdaQueryWrapper1.like(Setmeal::getName,name);
         }

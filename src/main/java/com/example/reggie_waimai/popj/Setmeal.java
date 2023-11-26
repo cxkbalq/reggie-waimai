@@ -20,7 +20,7 @@ public class Setmeal implements Serializable {
     private Long id;
 
     //当前门店id
-    private Long employeeId;
+    private Long mendianId;
 
     //分类id
     private Long categoryId;
