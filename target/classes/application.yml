@@ -50,7 +50,7 @@ logging:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
 #自定义配置
 reggie:
-  imgepath: D:\webcode\reggie_waimai\imge\
+  imgepath: /home/imge/
 #阿里云配置
 aliyun:
   oss:

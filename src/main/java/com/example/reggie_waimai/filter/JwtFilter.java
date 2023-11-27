@@ -27,7 +27,7 @@ public class JwtFilter implements Filter {
 
     //定义不需要拦截的路径
     private static final String[] Path = {"/login", "/common", "/sendMsg", "/mendian"};
-
+    //定义拦截区分用户端和商家端
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -57,13 +57,36 @@ public class JwtFilter implements Filter {
 //            writeErrorResponse(response, "NOT_LOGIN");
             return;
         }
+
         //验证设置的信息是否完整，防止人为删除报错
-        String userHeader = request.getHeader("user");
-        if (userHeader == null || Long.valueOf(userHeader) == null) {
-            log.info("用户端信息不完整，跳转到登录页面");
-            writeErrorResponse(response, "NOT_LOGIN");
-            return;
+        String userAgent = request.getHeader("User-Agent");
+        //用户端
+        if (userAgent.contains("Linux")) {
+            String userHeader = request.getHeader("user");
+            if (userHeader == null || Long.valueOf(userHeader) == null) {
+                log.info("用户端信息不完整，跳转到登录页面");
+                writeErrorResponse(response, "NOT_LOGIN");
+                return;
+            }
         }
+        //电脑端
+        else {
+            String employee= request.getHeader("Employee");
+            String mendian=request.getHeader("mendian");
+            if (employee == null || Long.valueOf(employee) == null) {
+                log.info("用户端信息不完整，跳转到登录页面");
+                writeErrorResponse(response, "NOT_LOGIN");
+                return;
+            }
+            if (mendian == null || Long.valueOf(mendian) == null) {
+                log.info("用户端信息不完整，跳转到登录页面");
+                writeErrorResponse(response, "NOT_LOGIN");
+                return;
+            }
+        }
+
+
+
 
         String jwt = request.getHeader("Jwttoken");
 

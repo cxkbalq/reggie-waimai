@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/employee")
-@CrossOrigin(origins = "http://localhost:8081") // 允许跨域访问的前端地址
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
