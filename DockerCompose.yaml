@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 2004
+    networks:
+      - hm-net
+  hmall:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hmall
+    ports:
+      - "8081:8080"
+    networks:
+      - hm-net
+    depends_on:
+      - mysql
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "18080:18080"
+      - "18081:18081"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx/html:/usr/share/nginx/html"
+    depends_on:
+      - hmall
+    networks:
+      - hm-net
+networks:
+  hm-net:
+    name: hmall
