@@ -1,7 +1,0 @@
-#部署docker环境
-db:
-  hostmysql: mysql
-  pw: 2004
-  hostredis: redis
-path:
-  lujin: /imge/
