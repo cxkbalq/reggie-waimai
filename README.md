@@ -1,6 +1,8 @@
 # Reggie-WaiMai
 
-PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二次修改的说明，前端部分请看另一个部分url：https://github.com/cxkbalq/Reggie-Vue-Merchant-Portal，采用了vue-cil进行二次开发，可以对学习vue的小伙伴提供一些帮助，全部vue开发
+PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二次修改的说明，前端部分采用了vue-cil进行二次开发，可以对学习vue的小伙伴提供一些帮助，全部vue开发，具体请看另一个部分url：https://github.com/cxkbalq/Reggie-Vue-Merchant-Portal
+
+
 
 ## 1.对于原本黑马瑞吉外卖修改进行修改部分的说明
 
