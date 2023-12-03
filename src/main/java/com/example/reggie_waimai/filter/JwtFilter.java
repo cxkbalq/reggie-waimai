@@ -40,15 +40,15 @@ public class JwtFilter implements Filter {
 
         log.info("当前拦截url为：" + url + method);
 
-        if ("OPTIONS".equals(method)) {
-            log.info("当前为CORS验证请求，直接放行");
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-        //设置跨域资源共享
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
+//        if ("OPTIONS".equals(method)) {
+//            log.info("当前为CORS验证请求，直接放行");
+//            filterChain.doFilter(servletRequest, servletResponse);
+//            return;
+//        }
+////        设置跨域资源共享
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+//        response.setHeader("Access-Control-Max-Age", "3600");
 
         //放行登录页面
         if (Arrays.stream(Path).anyMatch(url::contains)) {

@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/category")
-@CrossOrigin(origins = "http://localhost:8081") // 允许跨域访问的前端地址
 public class CategoryController {
 
     @Autowired
