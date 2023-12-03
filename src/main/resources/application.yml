@@ -3,15 +3,20 @@ server:
   tomcat:
     uri-encoding: UTF-8
     max-http-header-size: 8192
-
+  #添加路径信息
+  servlet:
+    context-path: /api
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/reggie
+    url: jdbc:mysql://${db.hostmysql}:3306/reggie
     username: root
-    password: 2004
+    password: ${db.pw}
   mvc:
     dispatch-options-request: true
+  #开发环境的设定
+  profiles:
+    active: dev
   servlet:
     #上传文件大小的限制
     multipart:
@@ -21,7 +26,7 @@ spring:
     name: springdataredis_demo
   #Redis相关配置
   redis:
-    host: localhost
+    host: ${db.hostredis}
     port: 6379
     #password: 123456
     database: 0 #操作的是0号数据库
@@ -50,7 +55,8 @@ logging:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
 #自定义配置
 reggie:
-#  imgepath: /home/imge/
+  imgepath: ${path.lujin}
+#  imgepath: D:\webcode\reggie_waimai\imge\
 #阿里云配置
 aliyun:
   oss:
