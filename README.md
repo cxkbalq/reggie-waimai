@@ -100,7 +100,7 @@ sudo docker compose up -d
 查看是否运行
 
 ```
-dokcer ps -a
+docker ps -a
 ```
 
 欧克，完成！！！！

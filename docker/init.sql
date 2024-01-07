@@ -19,21 +19,21 @@
 -- Table structure for table `address_book`
 --
 -- 设置存储过程，检查数据库是否存在并退出，下面都是gpt生成的，检查部分
-DELIMITER //
-
-CREATE PROCEDURE CheckAndExit()
-BEGIN
-  -- 检查数据库是否存在
-  IF EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'reggie') THEN
-    -- 数据库存在，输出消息并退出
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Database reggie already exists. Exiting script.';
-END IF;
-END //
-
-DELIMITER ;
-
--- 调用存储过程
-CALL CheckAndExit();
+-- DELIMITER //
+--
+-- CREATE PROCEDURE CheckAndExit()
+-- BEGIN
+--   -- 检查数据库是否存在
+--   IF EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'reggie') THEN
+--     -- 数据库存在，输出消息并退出
+--     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Database reggie already exists. Exiting script.';
+-- END IF;
+-- END //
+--
+-- DELIMITER ;
+--
+-- -- 调用存储过程
+-- CALL CheckAndExit();
 
 -- 如果没有退出，则继续执行下面的初始化操作
 
