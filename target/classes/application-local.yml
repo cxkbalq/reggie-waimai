@@ -1,0 +1,7 @@
+#开发环境
+db:
+  hostmysql: localhost
+  pw: 2004
+  hostredis: localhost
+path:
+  lujin: E:\code\java\reggie_waimai\imge\
