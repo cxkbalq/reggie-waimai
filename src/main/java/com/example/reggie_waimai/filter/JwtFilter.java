@@ -1,9 +1,11 @@
 package com.example.reggie_waimai.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.reggie_waimai.utils.WebSocket;
 import org.springframework.util.StringUtils;
 import com.example.reggie_waimai.utils.JwtUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -17,16 +19,20 @@ import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
+import javax.websocket.Session;
 
 import com.example.reggie_waimai.common.R;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Slf4j
 @WebFilter(urlPatterns = "/*")
+
 public class JwtFilter implements Filter {
 
     //定义不需要拦截的路径
-    private static final String[] Path = {"/login", "/common", "/sendMsg", "/mendian"};
+    @Resource
+    private WebSocket webSocket;
+    private static final String[] Path = {"/login", "/common", "/sendMsg", "/mendian","/notify","/gaode","/ws"};
     //定义拦截区分用户端和商家端
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -40,15 +46,15 @@ public class JwtFilter implements Filter {
 
         log.info("当前拦截url为：" + url + method);
 
-//        if ("OPTIONS".equals(method)) {
-//            log.info("当前为CORS验证请求，直接放行");
-//            filterChain.doFilter(servletRequest, servletResponse);
-//            return;
-//        }
-////        设置跨域资源共享
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-//        response.setHeader("Access-Control-Max-Age", "3600");
+        if ("OPTIONS".equals(method)) {
+            log.info("当前为CORS验证请求，直接放行");
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+//        设置跨域资源共享
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        response.setHeader("Access-Control-Max-Age", "3600");
 
         //放行登录页面
         if (Arrays.stream(Path).anyMatch(url::contains)) {

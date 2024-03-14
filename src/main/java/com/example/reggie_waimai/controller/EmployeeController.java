@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie_waimai.common.BaseContext;
 import com.example.reggie_waimai.popj.Employee;
+import com.example.reggie_waimai.utils.WebSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.service.EmployeeService;
 import com.example.reggie_waimai.utils.JwtUtils;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -23,7 +26,6 @@ import java.util.Map;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
     /*
     用户登录
     */

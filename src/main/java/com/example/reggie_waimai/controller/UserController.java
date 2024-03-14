@@ -7,6 +7,7 @@ import com.example.reggie_waimai.common.R;
 import com.example.reggie_waimai.popj.User;
 import com.example.reggie_waimai.service.UserService;
 import com.example.reggie_waimai.utils.JwtUtils;
+import com.example.reggie_waimai.utils.WebSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,6 +16,7 @@ import com.example.reggie_waimai.utils.SMSUtils;
 import com.example.reggie_waimai.utils.ValidateCodeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +30,11 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Resource
+    private WebSocket webSocket;
     @PostMapping("/sendMsg")
     public R<String> sendMsg(@RequestBody User user, HttpSession session){
+        webSocket.sendOneMessage(String.valueOf(100), "paysuccess");
         //获取手机号
         String phone = user.getPhone();
         SMSUtils smsUtils=new SMSUtils();

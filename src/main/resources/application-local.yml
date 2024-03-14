@@ -4,4 +4,4 @@ db:
   pw: 2004
   hostredis: localhost
 path:
-  lujin: D:\webcode\reggie_waimai\imge\
+  lujin: E:\code\java\reggie_waimai\imge\
