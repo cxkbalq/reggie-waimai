@@ -34,7 +34,7 @@ PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二
 
 效果图：
 
-![](C:\Users\29256\Pictures\Screenshots\屏幕截图%202023-11-27%20184348.png)
+![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11%E7%89%88%E6%9C%AC/imge/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-11-27%20184348.png)
 
 添加了账户权限功能，总共有三种权限
 
