@@ -18,6 +18,7 @@ import com.example.reggie_waimai.service.*;
 import com.example.reggie_waimai.utils.WebSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,8 @@ public class OrdersServiceimpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Value("${alipay.notifyUrl}")
+    private String notifyUrl;
 
     public String aliPay(Orders orders, HttpServletRequest request) throws AlipayApiException {
         String privateKey = "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC+3pMJE5QXYXYkG9NDRXEurj4lPyh5TK2CwComypKzS5pV501BGtsn9Lz3TJMtt7dNpwxzozEcZkAUG4aAuYgPvjCEcwZOWUJQPxbTTLiAAaso3qMr9fv4BN9jFbb/XlxQeG7QkiXvo/jhy/wRm65YyBhNNXWWFzaRInOxQd1CceocLfB8kyEDK128oPiKrPu0hoRNSyJVFKd6ADYgkmEE2DQz35QaQHEOmchmMIkte+Gsxi3EhlNNsSDNDEN5uC9TKBCBu1edgVYnfRrscZTT9iQ4QioNE5MBvducANXHbtE1PB3tXOKw96Ak2ZgTOVP0+3hpui2KnZMNpqolep7DAgMBAAECggEBAKGwr2J7AXMlDw3bvIY6Z30iAmdPL5xCRqKC47Jk3Q2iOCYZgaprc8hPXV0ps2yBO3k+0B+N2WazgAkIoFKf2RFtDnDFeEwa9UBBkbaCQbG+uB4xLI1rHn6msg6gMJv4db99pnJtvFFb2NR/FxRbi8COEXgml2wEUid0xgkdQLCtkpbM/qsDnnC4imNY6Xt+qxwbcKBezKxkx0wmS3pCO/W9oviATC+Jy55pLBTv2iTwP0DX8Mr+JOMoZc3vpstzBmO2zTxv9b5KWpHuRwILiJrtVZEy8nIpe7e1U3zuWUkALxHi75U5Qf0/SoDl/Zmxss6+39JeQyBeD5TOihXU7DECgYEA+EkIZmc+y5TIupZXVujKfv6yLrIS95zplwz9889tv0Bp3yGksWzx18Q8EHvhSy/52cPsw84DtbsqZ3gd6BHvrFufsWSn0r9e/f+r/FN/HBCJ3j9Lus7haS/w3/HuCnZVi2m2t0DGmNLmuA7dAIWn2dQoKZ1iXbrKuFB6/3/tPe0CgYEAxMzU0dKyjPKNyHQ6WwQOAQu2rBycKKOPHht6GC/vZnDXrw+msw3azJCulf7R8aLAB/W6K7CqeX0uGmKQZcZ8uVjXGO05zLeMQfvljTnTl7rBGzv1tSbPBl98fr98+l8jLU9FGM0G6gJb3bXCdkMe0u1UdmuhCeP6XNxU+mO/OW8CgYEAsQ7j/qMCFQw1WVp9Tm0UexwG1WYIQKyVqDKLp6L1EL5OweCsIhsfHE/ExbySHZxJARLHdZsk6iRfSQpPyX+A+9kbONYfGBuBEoGRlI+2xbzFlMhuqPl/phOaIxnUN4HL32+z7Vs0RSehgQCYehbWbHDvcz3ZOB5NEsPR8wK3nMECgYEAm2ucg1yfj/qaiH1p/Kk2GhNTH5e0p8+L3l4azXFF4qQpYeK9ZtkBO97jUigdS3SZrW+dqJVr/Ggk+cdvfEEGDSahMNlgdVFbnly+DAtoFILzsHto77iHdOQCIOM/Y0exMz5QNmbtF+/m9zBtNBKMDE5MDv2u/22hMqb7IYeW5FcCgYAcISyKPvg1Gk5lOw7wZqiCotF5XdRxrJZ/3htlTi73Vy2aDismjxLW+pO9nkgCyJwUtAqsTVTC2Kzqmb/Lx+RqUGoMV49ZGFcUceFsaD9wAmWbph3CRt0fdeLiN8nd/69jFAi70o3NqMnZUPY6xejrXQGDw6J9F69D3E3qheQk/Q==";
@@ -71,7 +74,7 @@ public class OrdersServiceimpl extends ServiceImpl<OrdersMapper, Orders> impleme
         }
         AlipayTradeWapPayRequest request1 = new AlipayTradeWapPayRequest();
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
-        request1.setNotifyUrl("http://123.60.129.35:88/api/notify");
+        request1.setNotifyUrl(notifyUrl);
         //订单编号
         model.setOutTradeNo(String.valueOf(orders.getId()));
         //订单金额

@@ -92,8 +92,6 @@ public class JwtFilter implements Filter {
         }
 
 
-
-
         String jwt = request.getHeader("Jwttoken");
 
         if (!StringUtils.hasLength(jwt)) {
