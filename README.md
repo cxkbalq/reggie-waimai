@@ -5,7 +5,7 @@ PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二
 
 
 ## 1.对于原本黑马瑞吉外卖修改进行修改部分的说明
-   
+
     !!!!这个项目运行一定一定要配合我的前端使用，因为对原有瑞吉外卖进行了大部分修改，已不适用原版本！！！
     !!!!这个项目运行一定一定要配合我的前端使用，因为对原有瑞吉外卖进行了大部分修改，已不适用原版本！！！
     !!!!这个项目运行一定一定要配合我的前端使用，因为对原有瑞吉外卖进行了大部分修改，已不适用原版本！！！
@@ -25,7 +25,7 @@ PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二
     controller/MendianController.java 门店部分的接口
     
     controller/OrdersController.java 订单金额的统计
-
+    
     3.添加了支付宝沙箱模式的支付，在手机打开页面可直接打开支付宝进行支付
     完善了所有支付逻辑，并采取了redis进行支付缓存定时功能等，减轻数据
     库压力，提供并发能力，并且采取了ws通信技术，进行前后端支付的通信，
@@ -33,8 +33,23 @@ PS：说明这个是对于我二次对黑马瑞吉外卖后端部分进行的二
     具体部分接口请自行查看
 
 效果图：
+选择门店:
 
-![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11%E7%89%88%E6%9C%AC/imge/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-11-27%20184348.png)
+权限等级
+
+![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11版本/mdimgae/1.png)
+
+添加门店
+
+![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11版本/mdimgae/2.png)
+
+仿美团的手机端
+
+![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11版本/mdimgae/3.png)
+
+接入支付宝沙箱
+
+![效果图](https://github.com/cxkbalq/reggie-waimai/blob/2023-11-11版本/mdimgae/4.png)
 
 添加了账户权限功能，总共有三种权限
 
