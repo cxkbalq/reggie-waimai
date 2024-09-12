@@ -18,6 +18,6 @@ public class AliPayConfig {
     private String appPrivateKey;
     @Value("${alipay.alipayPublicKey}")
     private String alipayPublicKey;
-    @Value("")
+    @Value("${alipay.notifyUrl}")
     private String notifyUrl;
 }
